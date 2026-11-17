@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paarth Agrawal – Quantitative Research</title>
+<meta name="description" content="Purdue data science student building rough-volatility calibration engines and consumer credit risk models.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📉</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0B1020;--panel:#121A33;--ink:#EAF0FF;--mute:#8F9BBE;--line:#222C4F;--fit:#5EEAD4;--stress:#FF5C7A;
+--disp:"Syne","Arial Black",Impact,sans-serif;--body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.6;overflow-x:hidden}
+a{color:inherit}
+a:focus-visible,input:focus-visible{outline:2px solid var(--fit);outline-offset:4px}
+.wrap{max-width:1100px;margin:0 auto;padding:0 28px}
+noscript style{display:none}
+
+/* preloader */
+#pre{position:fixed;inset:0;z-index:99;background:var(--bg);display:flex;flex-direction:column;justify-content:flex-end;padding:28px;transition:transform .9s cubic-bezier(.77,0,.18,1)}
+#pre.done{transform:translateY(-100%)}
+#pn{font-family:var(--disp);font-weight:800;font-size:clamp(96px,26vw,340px);line-height:.85;letter-spacing:-.04em}
+#pn+span{font-family:var(--disp);font-size:clamp(28px,6vw,80px);color:var(--fit)}
+.pl{color:var(--mute);margin:14px 0 18px}
+.pl b{color:var(--stress);font-weight:600}
+#bar{height:3px;background:var(--fit);transform:scaleX(0);transform-origin:left}
+
+/* nav */
+nav{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;gap:26px;padding:20px 28px;font-size:15px;background:linear-gradient(var(--bg),transparent)}
+nav .n{margin-right:auto;font-weight:600}
+nav a{text-decoration:none;color:var(--mute)}
+nav a:hover,nav .n{color:var(--ink)}
+@media(max-width:620px){nav a:not(.n){display:none}}
+
+/* hero */
+header{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:120px 28px 40px;overflow:hidden}
+#c{position:absolute;inset:0;width:100%;height:100%}
+header .in{position:relative;max-width:1100px;width:100%;margin:0 auto;pointer-events:none}
+h1{font-family:var(--disp);font-weight:800;font-size:clamp(60px,14vw,200px);line-height:.86;letter-spacing:-.04em;margin:0 0 24px}
+h1 span{display:block;overflow:hidden}
+h1 i{display:block;font-style:normal;transform:translateY(105%);transition:transform 1s cubic-bezier(.2,.8,.2,1) .15s}
+h1 span:nth-child(2) i{transition-delay:.3s}
+.in-on h1 i{transform:none}
+.sub{max-width:520px;font-size:20px;margin:0 0 28px}
+.ctl{display:flex;flex-wrap:wrap;gap:18px 32px;align-items:center;pointer-events:auto}
+.ctl label{font-size:15px;color:var(--mute)}
+.ctl output{color:var(--fit);font-weight:600;display:inline-block;min-width:3.2ch}
+input[type=range]{accent-color:var(--fit);width:220px;vertical-align:middle;margin:0 10px}
+.btn{display:inline-block;padding:11px 22px;border:1.5px solid var(--ink);border-radius:99px;text-decoration:none;font-weight:600;font-size:15px;transition:background .2s,color .2s}
+.btn:hover{background:var(--ink);color:var(--bg)}
+.hint{position:absolute;right:28px;top:100px;font-size:14px;color:var(--mute);z-index:2}
+
+/* marquee */
+.mq{overflow:hidden;border-block:1px solid var(--line);padding:22px 0}
+.mq div{display:flex;width:max-content;animation:mq 38s linear infinite}
+.mq span{font-family:var(--disp);font-weight:800;font-size:clamp(34px,5vw,64px);padding-right:.6em;white-space:nowrap;-webkit-text-stroke:1.5px var(--mute);color:transparent}
+.mq span:nth-child(even){color:var(--ink);-webkit-text-stroke:0}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* sections */
+section{padding:110px 0 30px}
+h2{font-family:var(--disp);font-weight:800;font-size:clamp(40px,7vw,96px);line-height:.95;letter-spacing:-.03em;margin:0 0 56px}
+.proj{display:grid;grid-template-columns:240px 1fr;gap:16px 48px;padding:44px 0;border-top:1px solid var(--line)}
+.meta{color:var(--mute);font-size:15px}
+.meta strong{display:block;color:var(--ink);font-size:17px;margin-bottom:6px}
+.proj h3{font-family:var(--disp);font-weight:700;font-size:clamp(24px,3vw,34px);line-height:1.12;margin:0 0 14px;letter-spacing:-.01em}
+.proj p{margin:0 0 14px;max-width:64ch}
+.find{border-left:3px solid var(--fit);padding-left:16px;margin:18px 0}
+.find.s{border-color:var(--stress)}
+.tags{display:flex;flex-wrap:wrap;gap:8px;padding:0;margin:16px 0;list-style:none}
+.tags li{font-size:14px;padding:3px 13px;border-radius:99px;background:var(--panel);color:var(--mute)}
+.proj a.l{font-weight:600;text-underline-offset:4px}
+
+/* waterfall */
+.wf{background:var(--panel);border-radius:14px;padding:22px;margin:22px 0 10px;max-width:640px}
+.wf h4{margin:0 0 4px;font-size:17px}
+.wf small{display:block;color:var(--mute);font-size:13.5px;line-height:1.45;margin-bottom:16px}
+.row{display:grid;grid-template-columns:130px 1fr 64px;gap:12px;align-items:center;margin:9px 0;font-size:15px}
+.trk{height:22px;border-radius:5px;background:var(--stress);overflow:hidden}
+.fil{height:100%;background:var(--fit);width:100%;transition:width .25s}
+.row output{text-align:right;color:var(--mute)}
+.verdict{margin-top:14px;font-weight:600;min-height:1.6em}
+
+/* toolkit */
+.tk{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+#sp{width:100%;max-width:480px;aspect-ratio:1;cursor:grab;touch-action:none;justify-self:center}
+dl{margin:0}dt{font-weight:600;margin-top:18px}dd{margin:2px 0 0;color:var(--mute)}
+@media(max-width:800px){.proj,.tk{grid-template-columns:1fr}.hint{display:none}.row{grid-template-columns:96px 1fr 52px}}
+
+/* contact */
+.mail{display:block;font-family:var(--disp);font-weight:800;font-size:clamp(22px,5.6vw,76px);letter-spacing:-.03em;text-decoration:none;line-height:1.1;margin:0 0 30px;word-break:break-all;transition:color .2s}
+.mail:hover{color:var(--fit)}
+.links{display:flex;gap:12px;flex-wrap:wrap}
+footer{padding:70px 0 20px;overflow:hidden}
+footer .big{font-family:var(--disp);font-weight:800;font-size:clamp(70px,24vw,330px);line-height:.8;letter-spacing:-.05em;color:transparent;-webkit-text-stroke:1.5px var(--line);white-space:nowrap;text-align:center}
+footer p{color:var(--mute);font-size:14px;text-align:center;margin:20px 0 0}
+
+.rv{opacity:0;transform:translateY(32px);transition:opacity .8s,transform .8s cubic-bezier(.2,.8,.2,1)}
+.rv.v{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}h1 i{transform:none}}
+</style>
+<noscript><style>#pre{display:none}.rv{opacity:1;transform:none}h1 i{transform:none}</style></noscript>
+</head>
+<body>
+<div id="pre" aria-hidden="true">
+  <div><span id="pn">0</span><span>%</span></div>
+  <div class="pl">calibrating the surface. Residual <b id="pr">1.0e-1</b></div>
+  <div id="bar"></div>
+</div>
+
+<nav aria-label="Primary">
+  <a class="n" href="#top">Paarth Agrawal</a>
+  <a href="#work">Work</a><a href="#toolkit">Toolkit</a><a href="#contact">Contact</a>
+</nav>
+
+<header id="top">
+  <canvas id="c" aria-label="Interactive 3D implied volatility surface"></canvas>
+  <div class="hint">Move your mouse to rotate the surface</div>
+  <div class="in">
+    <h1><span><i>Paarth</i></span><span><i>Agrawal</i></span></h1>
+    <p class="sub">Quantitative research on rough volatility and the credit risk that hides in plain sight. Data science and finance at Purdue.</p>
+    <div class="ctl">
+      <label>Hurst exponent H <input id="h" type="range" min="0.05" max="0.5" step="0.01" value="0.10" aria-label="Hurst exponent"><output id="ho">0.10</output></label>
+      <a class="btn" href="#work">See the work</a>
+      <a class="btn" href="Agrawal_Paarth_Resume.pdf">Resume</a>
+    </div>
+  </div>
+</header>
+
+<div class="mq" aria-hidden="true"><div>
+  <span>Rough Heston</span><span>PINN calibration</span><span>No-arbitrage</span><span>ABS waterfalls</span><span>Loan stacking</span><span>Monte Carlo</span>
+  <span>Rough Heston</span><span>PINN calibration</span><span>No-arbitrage</span><span>ABS waterfalls</span><span>Loan stacking</span><span>Monte Carlo</span>
+</div></div>
+
+<main class="wrap">
+<section id="work">
+  <h2 class="rv">Selected work</h2>
+
+  <article class="proj rv">
+    <div class="meta"><strong>Rough Heston Volatility Surface Calibration</strong>Independent research, Fall 2026</div>
+    <div>
+      <h3>Teaching a neural network to fit a rough-volatility surface</h3>
+      <p>I built a PyTorch engine that calibrates the Rough Heston model (H, ν, θ, ρ, V0) to option surfaces. A physics-informed network is trained against a Markovian-projection PDE residual, with derivatives from autograd.</p>
+      <p>A hybrid-scheme Monte Carlo simulator generates synthetic option chains with known ground-truth parameters, so I can check whether calibration recovers them. The slider at the top of this page shows why H matters: lower H makes short-dated skew much steeper.</p>
+      <div class="find">Calendar, butterfly, and static-bound no-arbitrage penalties keep fitted surfaces admissible. A validation suite reports implied-vol error, parameter recovery, and arbitrage diagnostics.</div>
+      <ul class="tags"><li>Python</li><li>PyTorch</li><li>Stochastic calculus</li><li>Monte Carlo</li></ul>
+      <a class="l" href="https://github.com/agrawpaa">Code on GitHub</a>
+    </div>
+  </article>
+
+  <article class="proj rv">
+    <div class="meta"><strong>Shadow Credit and ABS Pricing Engine</strong>Purdue Momentum, Finance Pillar<br>Project manager, Aug 2025 to May 2026</div>
+    <div>
+      <h3>How hidden Buy Now, Pay Later debt could underprice consumer ABS</h3>
+      <p>I led a 6-person team studying how unrecorded BNPL debt drives loan stacking. Automated Python and SQL pipelines pulled delinquency indicators from FRED, CFPB complaints, and SEC EDGAR filings.</p>
+      <p>An OLS model in statsmodels put the default multiplier at 1.2x to 2.0x under severe debt-stacking stress. I then built a 48-month Senior, Mezzanine, and Equity waterfall with CPR/SMM prepayment vectors and sequential loss allocation.</p>
+      <div class="find s">Debt shocks breached subordination and impaired principal on the BBB-rated tranche. The result was a long AAA, short BBB trade thesis, delivered as a credit memo and pitch deck.</div>
+      <div class="wf">
+        <h4>Try it: stress the pool</h4>
+        <small>A toy to show the mechanism, not our model’s output. It assumes a 6% base pool loss and an 8% equity, 14% mezzanine, 78% senior structure. The real waterfall runs 48 months with prepayments.</small>
+        <label>Default multiplier <input id="m" type="range" min="1" max="2" step="0.05" value="1" aria-label="Default multiplier"> <output id="mo">1.00x</output></label>
+        <div class="row"><span>Equity</span><div class="trk"><div class="fil" id="f0"></div></div><output id="o0">100%</output></div>
+        <div class="row"><span>Mezzanine (BBB)</span><div class="trk"><div class="fil" id="f1"></div></div><output id="o1">100%</output></div>
+        <div class="row"><span>Senior (AAA)</span><div class="trk"><div class="fil" id="f2"></div></div><output id="o2">100%</output></div>
+        <div class="verdict" id="vd"></div>
+      </div>
+      <ul class="tags"><li>Python</li><li>SQL</li><li>statsmodels</li><li>Excel</li><li>Fixed income</li></ul>
+      <a class="l" href="https://github.com/agrawpaa/shadow-debt-abs">Code on GitHub</a>
+    </div>
+  </article>
+
+  <article class="proj rv">
+    <div class="meta"><strong>Hyperscaler AI CapEx Stress Test</strong>Purdue Momentum, Finance Pillar<br>Aug 2025 to May 2026</div>
+    <div>
+      <h3>What if Oracle, Microsoft, and Meta’s GPUs wear out in three years?</h3>
+      <p>A custom Python simulation stress-tested all three balance sheets and valuation multiples under 3-year GPU obsolescence across $100B+ CapEx cycles. It quantifies how return on invested capital degrades and how cash flow decouples from earnings.</p>
+      <ul class="tags"><li>Python</li><li>Simulation</li><li>Valuation</li></ul>
+    </div>
+  </article>
+
+  <article class="proj rv">
+    <div class="meta"><strong>Consumer Credit Risk and Yield Curve Analysis</strong>Purdue Momentum, Finance Pillar<br>Aug 2025 to May 2026</div>
+    <div>
+      <h3>Modeling credit limits from FICO, income, and age</h3>
+      <p>I pulled financial and demographic data through REST APIs and SQL, modeled credit limits with multiple regression, and used one-way ANOVA to test differences across groups.</p>
+      <ul class="tags"><li>Python</li><li>SQL</li><li>Regression</li><li>ANOVA</li></ul>
+    </div>
+  </article>
+</section>
+
+<section id="toolkit">
+  <h2 class="rv">Toolkit</h2>
+  <div class="tk rv">
+    <canvas id="sp" aria-label="Rotating sphere of skills. Drag to spin."></canvas>
+    <dl>
+      <dt>Programming</dt><dd>Python, PyTorch, SQL, R, Java, Git, REST APIs</dd>
+      <dt>Data science</dt><dd>Pandas, NumPy, SciPy, statsmodels, Matplotlib, Seaborn, stochastic calculus, numerical analysis</dd>
+      <dt>Finance</dt><dd>Fixed-income analysis, ABS cash-flow modeling, derivatives pricing, portfolio optimization, regression modeling</dd>
+      <dt>Tools</dt><dd>Excel (Power Query, VBA), Anaconda</dd>
+      <dt>Education</dt><dd>B.S. Data Science with a Finance minor, Purdue University, expected May 2028</dd>
+    </dl>
+  </div>
+</section>
+
+<section id="contact">
+  <h2 class="rv">Let’s talk.</h2>
+  <div class="rv">
+    <a class="mail" href="mailto:paarth.agra@gmail.com">paarth.agra@gmail.com</a>
+    <div class="links">
+      <a class="btn" href="https://linkedin.com/in/paarthagra">LinkedIn</a>
+      <a class="btn" href="https://github.com/agrawpaa">GitHub</a>
+      <a class="btn" href="Agrawal_Paarth_Resume.pdf">Resume</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="big" aria-hidden="true">PAARTH</div><p>© 2026 Paarth Agrawal. West Lafayette, Indiana.</p></footer>
+
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+/* preloader */
+var pre=$('pre'),rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+function go(){document.body.classList.add('in-on');document.querySelector('header').classList.add('in-on')}
+if(rm){pre.remove();go()}else{
+  var s=performance.now();
+  (function f(n){var p=Math.min(1,(n-s)/1800),e=1-Math.pow(1-p,3);
+    $('pn').textContent=Math.round(e*100);
+    $('pr').textContent=Math.pow(10,-1-4*e).toExponential(1);
+    $('bar').style.transform='scaleX('+e+')';
+    if(p<1)requestAnimationFrame(f);else{pre.classList.add('done');go();setTimeout(function(){pre.remove()},1000)}
+  })(s);
+}
+/* reveal */
+var io=new IntersectionObserver(function(a){a.forEach(function(e){if(e.isIntersecting){e.target.classList.add('v');io.unobserve(e.target)}})},{threshold:.12});
+document.querySelectorAll('.rv').forEach(function(el){io.observe(el)});
+
+/* volatility surface */
+var c=$('c'),x=c.getContext('2d'),W,H,dpr,mx=.5,my=.5,yaw=-.6,pit=.85,hs=.10,ht=.10;
+function size(){dpr=Math.min(devicePixelRatio||1,2);W=c.clientWidth;H=c.clientHeight;c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0)}
+size();addEventListener('resize',size);
+addEventListener('mousemove',function(e){mx=e.clientX/innerWidth;my=e.clientY/innerHeight});
+$('h').addEventListener('input',function(e){ht=+e.target.value;$('ho').textContent=ht.toFixed(2)});
+var N=22,M=15;
+function vol(k,t,h){var v=.2+.075*(-.9*k+1.2*k*k)*Math.pow(t,h-.5);return Math.min(v,.95)}
+function P(k,t,h,ya,pi){
+  var v=vol(k,t,h),px=k*270,py=(.4-v)*250,pz=(t-.5)*380;
+  var X=px*Math.cos(ya)+pz*Math.sin(ya),Z=-px*Math.sin(ya)+pz*Math.cos(ya);
+  var Y=py*Math.cos(pi)-Z*Math.sin(pi),Z2=py*Math.sin(pi)+Z*Math.cos(pi);
+  var sc=(Math.min(W,1100)<700?.95:1.15)*700/(700+Z2+120);
+  return [W*(W<800?.5:.68)+X*sc,H*.45+Y*sc,v,Z2]
+}
+function mix(v){var m=Math.max(0,Math.min(1,(v-.28)/.5));return 'rgb('+Math.round(94+161*m)+','+Math.round(234-142*m)+','+Math.round(212-90*m)+')'}
+function seg(a,b){x.strokeStyle=mix((a[2]+b[2])/2);x.globalAlpha=Math.max(.15,Math.min(.95,.6-(a[3]+b[3])/1200));x.beginPath();x.moveTo(a[0],a[1]);x.lineTo(b[0],b[1]);x.stroke()}
+function draw(t){
+  hs+=(ht-hs)*.08;
+  var ty=-.6+(mx-.5)*1.3+Math.sin(t*.0004)*.12,tp=.85+(my-.5)*.5;
+  yaw+=(ty-yaw)*.05;pit+=(tp-pit)*.05;
+  x.clearRect(0,0,W,H);x.lineWidth=1.2;
+  var g=[],i,j;
+  for(i=0;i<N;i++){g[i]=[];for(j=0;j<M;j++)g[i][j]=P(-1+2*i/(N-1),.04+.96*j/(M-1),hs,yaw,pit)}
+  for(i=0;i<N;i++)for(j=0;j<M;j++){if(j<M-1)seg(g[i][j],g[i][j+1]);if(i<N-1)seg(g[i][j],g[i+1][j])}
+  x.globalAlpha=1;requestAnimationFrame(draw)
+}
+requestAnimationFrame(draw);
+
+/* waterfall toy */
+var m=$('m');
+function wf(){
+  var mu=+m.value,loss=6*mu,eq=Math.min(loss,8),mz=Math.min(Math.max(loss-8,0),14),sr=Math.max(loss-22,0);
+  var r=[1-eq/8,1-mz/14,1-sr/78];
+  $('mo').textContent=mu.toFixed(2)+'x';
+  for(var i=0;i<3;i++){$('f'+i).style.width=(r[i]*100)+'%';$('o'+i).textContent=Math.round(r[i]*100)+'%'}
+  $('vd').textContent=mz>0?'The BBB tranche loses '+Math.round(mz/14*100)+'% of principal once equity is wiped out.':(eq>=8?'Equity is wiped out. The BBB tranche is next in line.':'Equity absorbs the loss. The BBB tranche is untouched.')
+}
+m.addEventListener('input',wf);wf();
+
+/* skill sphere */
+var sp=$('sp'),sx=sp.getContext('2d'),words=['Python','PyTorch','SQL','R','Java','Pandas','NumPy','SciPy','statsmodels','Matplotlib','Seaborn','Git','REST APIs','Stochastic calculus','Monte Carlo','Numerical analysis','Fixed income','ABS modeling','Derivatives pricing','Portfolio optimization','Regression','Excel VBA','Power Query','Anaconda'],
+pts=words.map(function(w,i){var y=1-2*(i+.5)/words.length,r=Math.sqrt(1-y*y),a=i*2.39996;return{w:w,x:Math.cos(a)*r,y:y,z:Math.sin(a)*r}}),
+ax=.002,ay=.004,drag=false,lx=0,ly=0,S;
+function ssize(){var d=Math.min(devicePixelRatio||1,2);S=sp.clientWidth;sp.width=S*d;sp.height=S*d;sx.setTransform(d,0,0,d,0,0)}
+ssize();addEventListener('resize',ssize);
+sp.addEventListener('pointerdown',function(e){drag=true;lx=e.clientX;ly=e.clientY;sp.setPointerCapture(e.pointerId);sp.style.cursor='grabbing'});
+sp.addEventListener('pointermove',function(e){if(!drag)return;ay=(e.clientX-lx)*.0006;ax=-(e.clientY-ly)*.0006;lx=e.clientX;ly=e.clientY});
+sp.addEventListener('pointerup',function(){drag=false;sp.style.cursor='grab'});
+function spin(){
+  var ca=Math.cos(ay),sa=Math.sin(ay),cb=Math.cos(ax),sb=Math.sin(ax);
+  sx.clearRect(0,0,S,S);sx.textAlign='center';sx.textBaseline='middle';
+  pts.forEach(function(p){
+    var X=p.x*ca+p.z*sa,Z=-p.x*sa+p.z*ca,Y=p.y*cb-Z*sb;Z=p.y*sb+Z*cb;p.x=X;p.y=Y;p.z=Z});
+  pts.slice().sort(function(a,b){return a.z-b.z}).forEach(function(p){
+    var k=(p.z+1)/2,sc=.75+.5*k;
+    sx.globalAlpha=.25+.75*k;sx.fillStyle=k>.55?'#5EEAD4':'#EAF0FF';
+    sx.font='600 '+Math.round(S*.045*sc)+'px "Instrument Sans",sans-serif';
+    sx.fillText(p.w,S/2+p.x*S*.38,S/2+p.y*S*.38)});
+  if(!drag){ay+=(.004-ay)*.02;ax+=(.002-ax)*.02}
+  requestAnimationFrame(spin)
+}
+requestAnimationFrame(spin);
+})();
+</script>
+</body>
+</html>
